@@ -97,3 +97,48 @@ async def increase_new_views(db: AsyncSession, news_id: int):
 
     # 更新 → 检查数据库是否真的命中了数据 → 命中了返回True
     return result.rowcount > 0
+
+
+# 获取相关推荐新闻
+async def get_related_news(db: AsyncSession, news_id: int, category_id: int, limit: int = 5):
+    # # 先尝试从缓存获取相关新闻
+    # cached_related = await get_cached_related_news(news_id, category_id)
+    # if cached_related:
+    #     return cached_related
+
+    # 查询数据库
+    stmt = (
+        select(News)
+        .where(
+            News.id != news_id,
+            News.category_id == category_id
+        )
+        .order_by(
+            News.views.desc(),
+            News.publish_time.desc()
+        )
+        .limit(limit)
+    )
+
+    result = await db.execute(stmt)
+    related_news = result.scalars().all()
+
+    related_list = [
+        {
+            "id": item.id,
+            "title": item.title,
+            "content": item.content,
+            "image": item.image,
+            "author": item.author,
+            "publishTime": item.publish_time,
+            "categoryId": item.category_id,
+            "views": item.views
+        }
+        for item in related_news
+    ]
+
+    # # 写入缓存
+    # if related_list:
+    #     await cache_related_news(news_id, category_id, related_list)
+
+    return related_list

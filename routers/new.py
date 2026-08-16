@@ -1,4 +1,4 @@
-from http.client import HTTPException
+from fastapi import HTTPException
 
 from fastapi import APIRouter
 from fastapi.params import Depends, Query
@@ -82,13 +82,13 @@ async def get_news_detail(
     news_detail = await news.get_news_detail(db, news_id)
 
     if news_detail is None:
-        raise HTTPException(code=404,data="该新闻不存在")
+        raise HTTPException(status_code=404,detail="该新闻不存在")
 
     # 新闻浏览量 + 1
     news_res = await news.increase_new_views(db, news_id)
 
     if not news_res:
-        raise HTTPException(code=404, data="更新浏览量失败")
+        raise HTTPException(status_code=404, detail="更新浏览量失败")
 
     # 新闻详情-相关推荐
     related_news = await news.get_related_news(

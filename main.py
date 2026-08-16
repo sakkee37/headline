@@ -1,23 +1,12 @@
 from fastapi import FastAPI
-from routers import new
+from routers import new,users
 from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
-
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
-
 app.include_router(new.router)
 
+app.include_router(users.router)
 
 # 允许的来源（可以是域名列表）
 origins = [
