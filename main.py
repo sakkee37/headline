@@ -1,12 +1,18 @@
 from fastapi import FastAPI
-from routers import new,users
+from routers import new,users,favorite
 from fastapi.middleware.cors import CORSMiddleware
 
+from utils.exception_handler import register_exception_handlers
 
 app = FastAPI()
 app.include_router(new.router)
 
 app.include_router(users.router)
+
+app.include_router(favorite.router)
+
+# 注册异常处理器
+register_exception_handlers(app)
 
 # 允许的来源（可以是域名列表）
 origins = [

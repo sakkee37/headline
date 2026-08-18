@@ -3,6 +3,7 @@ name = "toutiao1"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
+    "datetime>=6.0",
     "fastapi>=0.141.1",
     "news",
     "uvicorn>=0.52.3",
