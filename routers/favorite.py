@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config.db_config import get_db
 from crud import favorite
 from models.users import User
-from schemas.favorite import FavoriteCheckResponse
+from schemas.favorite import FavoriteCheckResponse, FavoriteAddRequest
 from utils.auth import get_current_user
 from utils.response import success_response
 
